@@ -379,6 +379,38 @@ workflows:
       cpu: 1000m
       memory: 2048Mi
 
+internalWorker:
+  # Enable for internal workers for Temporal-powered Retool Vectors
+  enabled: false
+  # Config for internal worker pods. Node heap size limits can be overridden here
+  # otelCollector can be set to an OpenTelemetry Collector in your k8s cluster. This will configure Temporal metrics collection which
+  # provides observability into worker performance, particularly useful in high QPS use-cases
+  # environmentVariables will only be set on the worker
+  config: {}
+  # config: {
+  #   nodeOptions: --max_old_space_size=1024
+  #   otelCollector: {
+  #     enabled: true
+  #     endpoint: http://$(HOST_IP):4317
+  #   }
+  #   environmentVariables: []
+  #   - name: FOO
+  #     value: "bar"
+  # }
+  # Resources for the internal worker - these are sane inputs that bias towards stability
+  # Can adjust but may see OOM errors if memory too low for heavy workflow load
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 8192Mi
+    requests:
+      cpu: 1000m
+      memory: 2048Mi
+  # Timeout for queries, in ms. This will set the timeout for internal worker-related pods only
+  # If this value is not set but config.dbConnectorTimeout is, we will set internal worker pod timeouts
+  # to .Values.config.dbConnectorTimeout
+  # dbConnectorTimeout: 120000
+
 codeExecutor:
   # Enable this for Python support and running code more securely within a separate
   # sandboxed environment

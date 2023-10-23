@@ -148,6 +148,20 @@ Usage: (include "retool.workflows.enabled" .)
 {{- end -}}
 
 {{/*
+Set Temporal enabled
+Usage:  (include "retool.temporal.enabled" .)
+*/}}
+{{- define "retool.temporal.enabled" -}}
+{{- $output := "" -}}
+{{- if or (index .Values "retool-temporal-services-helm" "enabled") (.Values.workflows.temporal.enabled) -}}
+  {{- $output = "1" -}}
+{{- else -}}
+  {{- $output = "" -}}
+{{- end -}}
+{{- $output -}}
+{{- end -}}
+
+{{/*
 Set Temporal frontend host
 */}}
 {{- define "retool.temporal.host" -}}
@@ -185,4 +199,19 @@ Set code executor service name
 */}}
 {{- define "retool.codeExecutor.name" -}}
 {{ template "retool.fullname" . }}-code-executor
+{{- end -}}
+
+
+{{/*
+Set Worker enabled
+Usage:  (include "retool.worker.enabled" .)
+*/}}
+{{- define "retool.worker.enabled" -}}
+{{- $output := "" -}}
+{{- if or (include "retool.workflows.enabled" .) (.Values.internalWorker.enabled) -}}
+  {{- $output = "1" -}}
+{{- else -}}
+  {{- $output = "" -}}
+{{- end -}}
+{{- $output -}}
 {{- end -}}
