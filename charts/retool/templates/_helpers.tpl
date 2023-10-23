@@ -200,18 +200,3 @@ Set code executor service name
 {{- define "retool.codeExecutor.name" -}}
 {{ template "retool.fullname" . }}-code-executor
 {{- end -}}
-
-
-{{/*
-Set Worker enabled
-Usage:  (include "retool.worker.enabled" .)
-*/}}
-{{- define "retool.worker.enabled" -}}
-{{- $output := "" -}}
-{{- if or (include "retool.workflows.enabled" .) (.Values.internalWorker.enabled) -}}
-  {{- $output = "1" -}}
-{{- else -}}
-  {{- $output = "" -}}
-{{- end -}}
-{{- $output -}}
-{{- end -}}
